@@ -26,5 +26,10 @@ Images are sourced from the [Anime-Girls-Holding-Programming-Books](https://gith
     * Copy the URL into your browser and invite it to the server you want it on
 5. Create a .env file in the folder with the python script and copy the contents of the .env.example file into it
 6. Reset the token for the bot and paste the token in the .env file.
-7. Check over the config.json file and make the desired changes
+7. Check over the config.json file and make the desired changes. I have set a few specific languages to false by default because they will cause spam.
 8. Either host the bot on a server or host it from your own computer and thats it. I have my bot run on my pc startup
+
+### FAQ (or things I think you will ask)
+
+* ***Why are C# and C++ set to false by defaut?***
+    > Because the code looks for words using word characters and *#* and *+* arent included. So when it sees **C#** or **C++** it sees it as **C** and then sends an image from all 3 languages. This can be fixed I'm just lazy.

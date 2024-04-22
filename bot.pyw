@@ -43,4 +43,12 @@ async def on_message(message):
 
                   await message.channel.send(image)
 
+@bot.command
+async def stop(ctx):
+    if ctx.author.name in config["adminUsers"] or (config["allowServerAdminsToStop"] and any(role.permissions.administrator for role in ctx.author.roles)):
+        await ctx.send("Shutting down")
+        await bot.close()
+    else:
+        await ctx.reply("You are not aloud to shut me off!")
+
 bot.run(BOT_TOKEN)

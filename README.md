@@ -33,3 +33,5 @@ Images are sourced from the [Anime-Girls-Holding-Programming-Books](https://gith
 
 * ***Why are C# and C++ set to false by defaut?***
     > Because the code looks for words using word characters and *#* and *+* arent included. So when it sees **C#** or **C++** it sees it as **C** and then sends an image from all 3 languages. This can be fixed I'm just lazy.
+* ***Why is it a .pyw file instead of .py?***
+    > Because it doesnt open a cmd window when it runs as a .pyw. Feel free to change this to a .py if you want.

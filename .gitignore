@@ -1,3 +1,4 @@
 .env
 
+# just for my own folder, you can safely get rid of this ignore
 /images/

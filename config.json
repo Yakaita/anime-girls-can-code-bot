@@ -1,3 +1,4 @@
 {
-
+    "sendOnReadyMessage": true,
+    "onReadyMessageChannelId": 1136737687106236528
 }

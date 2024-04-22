@@ -17,8 +17,8 @@ bot = commands.Bot(command_prefix="", intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    channel = bot.get_channel(1136737687106236528)
-    await channel.send("Reloaded")
+    if config["sendOnReadyMessage"]:
+      await bot.get_channel(config["onReadyMessageChannelId"]).send("Ready to send pics :)")
 
 @bot.event
 async def on_message(message):

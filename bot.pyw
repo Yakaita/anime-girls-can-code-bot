@@ -29,12 +29,15 @@ async def stop(ctx):
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user:
+    if message.author == bot.user: return
+    
+    #check if the whitelist is active and if this channel is part of it
+    if config["useWhitelist"] and message.channel.id not in config["whitelist"]:
         await bot.process_commands(message)
         return
     
-    #check if the whitelist is active and if this channel is part of it
-    if config["useWhitelist"] and message.channel not in config["whitelist"]:
+    #check if the channel is in the blacklist
+    if message.channel.id in config["blacklist"]:
         await bot.process_commands(message)
         return
 

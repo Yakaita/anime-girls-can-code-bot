@@ -6,6 +6,13 @@
     "adminUsers": [
         ".yakaita"
     ],
+    "useWhitelist": false,
+    "whitelist":[
+        
+    ],
+    "blacklist":[
+        
+    ],
     "languages": {
         "A++": false,
         "ABAP": true,

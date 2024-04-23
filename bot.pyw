@@ -29,27 +29,42 @@ async def stop(ctx):
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user:
+    if message.author == bot.user: return
+    
+    #check if the whitelist is active and if this channel is part of it
+    if config["useWhitelist"] and message.channel.id not in config["whitelist"]:
+        await bot.process_commands(message)
         return
     
+    #check if the channel is in the blacklist
+    if message.channel.id in config["blacklist"]:
+        await bot.process_commands(message)
+        return
+    
+    #check if the channel is in the blacklist
+    if message.channel in config["blacklist"]:
+        await bot.process_commands(message)
+        return
+
     for language in config["languages"].keys():
         updatedLanguage = r"\b"+ language.lower() + r"\b"
         if re.search(updatedLanguage,message.content.lower()) != None:
             if config["languages"][language]:
-              await message.channel.send(f"Picture of {message.author.display_name} incoming!")
-              transport: AIOHTTPTransport = AIOHTTPTransport(url="https://graphql.senpy.club")
-              
-              async with Client(transport=transport, fetch_schema_from_transport=True) as client:
-                  query = gql(
-                    """
-                    query getImagesFromLanguage($language: String!){
-                      language(language: $language)
-                    }
-                    """
-                  )
-                  image = random.choice((await client.execute(query,variable_values={"language":language}))["language"])
+                await message.channel.send(f"Picture of {message.author.display_name} incoming!")
+                transport: AIOHTTPTransport = AIOHTTPTransport(url="https://graphql.senpy.club")
+                
+                async with Client(transport=transport, fetch_schema_from_transport=True) as client:
+                    query = gql(
+                        """
+                        query getImagesFromLanguage($language: String!){
+                        language(language: $language)
+                        }
+                        """
+                    )
+                    image = random.choice((await client.execute(query,variable_values={"language":language}))["language"])
 
-                  await message.channel.send(image)
+                    await message.channel.send(image)
+
     await bot.process_commands(message)
 
 bot.run(BOT_TOKEN)

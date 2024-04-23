@@ -19,6 +19,14 @@ async def on_ready():
     if config["sendOnReadyMessage"]:
       await bot.get_channel(config["onReadyMessageChannelId"]).send("Ready to send pics :)")
 
+@bot.command()
+async def stop(ctx):
+    if ctx.author.name in config["adminUsers"] or (config["allowServerAdminsToStop"] and any(role.permissions.administrator for role in ctx.author.roles)):
+        await ctx.send("Shutting down")
+        await bot.close()
+    else:
+        await ctx.reply("You are not aloud to shut me off!")
+
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -42,13 +50,6 @@ async def on_message(message):
                   image = random.choice((await client.execute(query,variable_values={"language":language}))["language"])
 
                   await message.channel.send(image)
-
-@bot.command
-async def stop(ctx):
-    if ctx.author.name in config["adminUsers"] or (config["allowServerAdminsToStop"] and any(role.permissions.administrator for role in ctx.author.roles)):
-        await ctx.send("Shutting down")
-        await bot.close()
-    else:
-        await ctx.reply("You are not aloud to shut me off!")
+    await bot.process_commands(message)
 
 bot.run(BOT_TOKEN)

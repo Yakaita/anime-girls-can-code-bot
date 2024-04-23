@@ -13,9 +13,6 @@
     "blacklist":[
         
     ],
-    "blacklist":[
-
-    ],
     "languages": {
         "A++": false,
         "ABAP": true,

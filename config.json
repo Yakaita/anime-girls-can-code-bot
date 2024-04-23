@@ -10,6 +10,9 @@
     "whitelist":[
         1136737687106236528
     ],
+    "blacklist":[
+
+    ],
     "languages": {
         "A++": false,
         "ABAP": true,

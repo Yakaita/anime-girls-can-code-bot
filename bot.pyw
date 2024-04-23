@@ -37,6 +37,11 @@ async def on_message(message):
     if config["useWhitelist"] and message.channel not in config["whitelist"]:
         await bot.process_commands(message)
         return
+    
+    #check if the channel is in the blacklist
+    if message.channel in config["blacklist"]:
+        await bot.process_commands(message)
+        return
 
     for language in config["languages"].keys():
         updatedLanguage = r"\b"+ language.lower() + r"\b"

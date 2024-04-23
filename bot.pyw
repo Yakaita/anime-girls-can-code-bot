@@ -7,49 +7,38 @@ import discord, re, random, os, json
 # load the .env file
 load_dotenv()
 # load the config
-with open('config.json','r') as config_file:
-    config = json.load(config_file)
+with open('config.json','r') as config_file: config = json.load(config_file)
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-
+# Setup bot
 bot = commands.Bot(command_prefix=config["commandPrefix"], intents=discord.Intents.all())
 
+# On ready event
 @bot.event
 async def on_ready():
-    if config["sendOnReadyMessage"]:
-      await bot.get_channel(config["onReadyMessageChannelId"]).send("Ready to send pics :)")
+    if config["sendOnReadyMessage"]: await bot.get_channel(config["onReadyMessageChannelId"]).send("Ready to send pics :)")
 
-@bot.command()
-async def stop(ctx):
-    if ctx.author.name in config["adminUsers"] or (config["allowServerAdminsToStop"] and any(role.permissions.administrator for role in ctx.author.roles)):
-        await ctx.send("Shutting down")
-        await bot.close()
-    else:
-        await ctx.reply("You are not aloud to shut me off!")
-
+# On message event
 @bot.event
 async def on_message(message):
-    if message.author == bot.user: return
+    if message.author == bot.user: return # Dont reply to my own messages
     
-    #check if the whitelist is active and if this channel is part of it
+    # Check if the whitelist is active and if this channel is not part of it
     if config["useWhitelist"] and message.channel.id not in config["whitelist"]:
         await bot.process_commands(message)
         return
     
-    #check if the channel is in the blacklist
+    # Check if the channel is in the blacklist
     if message.channel.id in config["blacklist"]:
         await bot.process_commands(message)
         return
-    
-    #check if the channel is in the blacklist
-    if message.channel in config["blacklist"]:
-        await bot.process_commands(message)
-        return
 
+    # Check for each language in the message
     for language in config["languages"].keys():
         updatedLanguage = r"\b"+ language.lower() + r"\b"
         if re.search(updatedLanguage,message.content.lower()) != None:
+            # Check if the language is set to True in the config
             if config["languages"][language]:
+                # Get the image
                 await message.channel.send(f"Picture of {message.author.display_name} incoming!")
                 transport: AIOHTTPTransport = AIOHTTPTransport(url="https://graphql.senpy.club")
                 
@@ -65,6 +54,17 @@ async def on_message(message):
 
                     await message.channel.send(image)
 
+    # allow the bot to process commands after this is run
     await bot.process_commands(message)
 
-bot.run(BOT_TOKEN)
+# stop command 
+@bot.command()
+async def stop(ctx):
+    # Check if the user has the correct permissions
+    if ctx.author.name in config["adminUsers"] or (config["allowServerAdminsToStop"] and any(role.permissions.administrator for role in ctx.author.roles)):
+        await ctx.send("Shutting down")
+        await bot.close()
+    else:
+        await ctx.reply("You are not aloud to shut me off!")
+
+bot.run(os.getenv("BOT_TOKEN"))

@@ -2,6 +2,9 @@
     "sendOnReadyMessage": true,
     "onReadyMessageChannelId": 1136737687106236528,
     "commandPrefix": "!",
+    "otherPrefixesToIgnore":[
+        
+    ],
     "allowServerAdminsToStop": true,
     "adminUsers": [
         ".yakaita"

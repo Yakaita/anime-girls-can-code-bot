@@ -21,6 +21,11 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     if message.author == bot.user: return # Dont reply to my own messages
+
+    # check if this is a command
+    if message.content.startswith(config["commandPrefix"] or any(message.content[0] for prefix in config["otherPrefixesToIgnore"])):
+        await bot.process_commands(message)
+        return
     
     # Check if the whitelist is active and if this channel is not part of it
     if config["useWhitelist"] and message.channel.id not in config["whitelist"]:
@@ -53,9 +58,6 @@ async def on_message(message):
                     image = random.choice((await client.execute(query,variable_values={"language":language}))["language"])
 
                     await message.channel.send(image)
-
-    # allow the bot to process commands after this is run
-    await bot.process_commands(message)
 
 # stop command 
 @bot.command()
